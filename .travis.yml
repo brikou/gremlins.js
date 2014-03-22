@@ -7,12 +7,10 @@ language: node_js
 node_js:
     - 0.10
 
-before_script:
-    - npm install --dev
-
 script:
     - npm test
 
 after_success:
     - f=.git/credentials && git config credential.helper "store --file=${f}" && echo "https://${TOKEN}:@github.com" > ${f}
     - make build
+    - f=gremlins.min.js && if [ -n "$(git diff --stat ${f})" ]; then git add $f && git commit -m "Update minified version" && git push fi
