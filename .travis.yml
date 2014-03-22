@@ -14,13 +14,20 @@ after_success:
     - make build
     - |
         if [ -n "$(git diff --stat gremlins.min.js)" ]; then
+            echo "we must update the min. version"
+
             echo "https://${TOKEN}:@github.com" > .git/c
             git config credential.helper "store --file=.git/c"
+
+            echo "ok here i am"
 
             git config user.email "brikou@gmail.com"
             git config user.name "Brikou Carré"
 
+            echo "config is fine"
+
             git add gremlins.min.js
             git commit -m "Update minified version"
+            echo "now pushing"
             git push
         fi
