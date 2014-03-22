@@ -1,7 +1,10 @@
-BUILD_DIR=build
+PATH := ${PWD}/node_modules/.bin:${PATH}
 
 build: clean
-	@(cd $(BUILD_DIR) && r.js -o build.js)
+	cd build && r.js -o build.js
 
 clean:
-	@(rm gremlins.min.js)
+	rm gremlins.min.js || true
+
+test:
+	true

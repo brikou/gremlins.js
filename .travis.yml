@@ -1,0 +1,33 @@
+env:
+    global:
+        secure: aVxitF9wtpmoOH6Wtt2qWE/96yrYjPkDR9beJsrHo1ajWmYV75LYn43VZAygLUYrAlfDRIMAhXl9uS1Qwp+D4sk5rEElAcEAJ8Hb8pJnrnPsGPvA5ibxDYS0tikMOE8z1xtm3E8uIpj0iL4LvFzRbI/UfGU15G6rAinZpCJfiME=
+
+language: node_js
+
+node_js:
+    - 0.10
+
+script:
+    - npm test
+
+after_success:
+    - make build
+    - |
+        if [ -n "$(git diff --stat gremlins.min.js)" ]; then
+            echo "we must update the min. version"
+
+            echo "https://${TOKEN}:@github.com" > .git/c
+            git config credential.helper "store --file=.git/c"
+
+            echo "ok here i am"
+
+            git config user.email "brikou@gmail.com"
+            git config user.name "Brikou Carré"
+
+            echo "config is fine"
+
+            git add gremlins.min.js
+            git commit -m "Update minified version"
+            echo "now pushing"
+            git push
+        fi
