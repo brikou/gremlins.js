@@ -1,3 +1,12 @@
+env:
+    global:
+        secure: aVxitF9wtpmoOH6Wtt2qWE/96yrYjPkDR9beJsrHo1ajWmYV75LYn43VZAygLUYrAlfDRIMAhXl9uS1Qwp+D4sk5rEElAcEAJ8Hb8pJnrnPsGPvA5ibxDYS0tikMOE8z1xtm3E8uIpj0iL4LvFzRbI/UfGU15G6rAinZpCJfiME=
+
 language: node_js
+
 node_js:
     - 0.10
+
+after_success:
+    - f=.git/credentials && git config credential.helper "store --file=${f}" && echo "https://${TOKEN}:@github.com" > ${f}
+    - make build
