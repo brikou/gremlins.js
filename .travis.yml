@@ -11,6 +11,13 @@ script:
     - npm test
 
 after_success:
-    - f=.git/credentials && git config credential.helper "store --file=${f}" && echo "https://${TOKEN}:@github.com" > ${f}
     - make build
-    - f=gremlins.min.js && if [ -n "$(git diff --stat ${f})" ]; then git add $f && git commit -m "Update minified version" && git push fi
+    - |
+        if [ -n "$(git diff --stat gremlins.min.js)" ]; then
+            echo "https://${TOKEN}:@github.com" > .git/c
+            git config credential.helper "store --file=.git/c"
+
+            git add gremlins.min.js
+            git commit -m "Update minified version"
+            git push
+        fi
